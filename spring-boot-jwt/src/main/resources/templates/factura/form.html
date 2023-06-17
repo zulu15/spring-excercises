@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/layout/layout :: head}">
+</head>
+<body>
+	<header th:replace="~{/layout/layout :: header}"></header>
+
+	<div class="container">
+		<div class="row">
+			<div class="offset-md-4 col-md-4 offset-md-4">
+				<form method="post" th:action="@{/factura/form}"
+					th:object="${factura}">
+
+					<strong
+						th:text="${'Factura para el cliente '+ factura.cliente.nombre + ' ' +factura.cliente.apellido}"></strong>
+
+					<div class="form-group">
+						<label for="descripcion">Descripción</label> 
+						<input class="form-control" id="descripcion" type="text" th:field="*{descripcion}"></input>				
+						<div class="alert alert-danger" role="alert" th:errors="*{descripcion}"></div>
+					</div>
+
+					<div class="form-group">
+						<label for="observacion">Observación</label> 
+						<input class="form-control" id="observacion" type="text" th:field="*{observacion}"></input>
+					</div>
+
+					<div class="form-group">
+						<label for="producto">Buscar producto</label> 
+						<input class="form-control" id="buscar_producto" name="producto" type="text"></input>
+					</div>
+
+					<table th:replace="~{/factura/items :: items}"></table>
+					<table id="cargar_item_productos" class="table table-stripped">
+						<thead>
+							<tr>
+								<th>Nombre</th>
+								<th>Precio</th>
+								<th>Cantidad</th>
+								<th>Total</th>
+								<th>Eliminar</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+
+					<h6>
+						Total general: <span class="text-white bg-dark" id="total_general" >0</span>
+					</h6>
+					
+
+
+					<input type="submit" value="Enviar" class="btn btn-primary"></input>
+				</form>
+			</div>
+		</div>
+		<footer th:replace="~{/layout/layout :: footer}"></footer>
+		<script
+			th:replace="~{/factura/js/autocomplete-productos :: javascript}"></script>
+	</div>
+</body>
+</html>

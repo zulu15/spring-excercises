@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Send parameters</title>
+</head>
+<body>
+
+<a th:href="@{/params/greetings(apellido='Sanchez')}">/params/greetings?apellido=Sanchez</a><br>	
+<a th:href="@{/params/greetings-loop(nombre='Joaquin',loop=10)}">/params/greetings-loop?nombre=Joaquin&loop=10</a>	
+
+</body>
+</html>

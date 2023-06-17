@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title></title>
+</head>
+<body>
+
+		<div th:replace="~{fragments/fragments :: tiempoDemora}"></div>
+		
+<ul>
+	<li th:text="${usuario.username}"></li>
+	<li th:text="${usuario.password}"></li>
+	<li th:text="${usuario.email}"></li>
+	<li th:text="${usuario.id}"></li>
+	<li th:text="${usuario.cuenta}"></li>
+	<li th:text="${#dates.format(usuario.fechaNacimiento,'dd/MM/yyyy')}"></li>
+	<li th:text="${usuario.pais.id}"></li>
+	<li th:text="${usuario.pais.codigo}"></li>
+	<li th:text="${usuario.pais.nombre}"></li>
+	<li th:text="'Usuario Habilitado: ' + (${usuario.isHabilitado} ? 'Si' : 'No')"></li>
+	<li th:text="'Genero: ' + ${usuario.genero}"></li>
+</ul>
+
+<div>Roles seleccionados:</div>
+<ul>
+	<li th:each="role: ${usuario.roles}" th:text="${role.id + ': ' + role.codigo + ' ' + role.nombre}"></li>
+</ul>
+
+</body>
+</html>

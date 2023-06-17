@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Recibir parámetros por GET</title>
+</head>
+<body>
+
+	<span th:text="${greetings}"></span>
+
+	<div th:each="saludo: ${saludos}">
+		<span th:text="${saludo}"></span>
+	</div>
+
+
+
+</body>
+</html>

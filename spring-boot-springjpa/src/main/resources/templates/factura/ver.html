@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/layout/layout :: head}">
+</head>
+<body>
+	<header th:replace="~{/layout/layout :: header}"></header>
+	<div class="container">
+	<a th:href="@{'/ver/'+ ${factura.cliente.id}}" class="link-secondary">&laquo; Volver</a>
+	<div class="row">
+		<div class="offset-md-11 col-md-1">
+			<a th:href="@{'/factura	/ver/'+ ${factura.cliente.id}(format=pdf)}" class="btn btn-danger">PDF</a>
+		</div>
+		
+	</div>
+	
+		<div class="card">
+			<div class="card-header text-bg-primary p-3">
+				<strong>Datos del cliente</strong>
+			</div>
+			<div class="card-body">
+				<ul class="list-group">
+					<li class="list-group-item"
+						th:text="'Email: '+${factura.cliente.email}"></li>
+					<li class="list-group-item"
+						th:text="'Cliente: '+${factura.cliente}"></li>
+
+				</ul>
+			</div>
+			<div class="card-header text-bg-secondary p-3">
+				<strong th:text="'Factura: '+ ${factura.descripcion}"></strong>
+			</div>
+
+			<div class="card-body">
+				<ul class="list-group">
+					<li class="list-group-item" th:text="'Folio: ' + ${factura.id}"></li>
+					<li class="list-group-item"
+						th:text="'Fecha de creación: '+ ${factura.fecha}"></li>
+
+				</ul>
+
+				<table
+					class="table table-striped table-hover table-bordered margin-top mt-3"
+					th:if="${not #lists.isEmpty(factura.items)}">
+					<thead class="table-dark">
+						<tr>
+							<th>Producto</th>
+							<th>Precio</th>
+							<th>Cantidad</th>
+							<th>Total</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="item : ${factura.items}">
+							<td th:text="${item.producto.nombre}"></td>
+							<td th:text="${item.producto.precio}"></td>
+							<td th:text="${item.cantidad}"></td>
+							<td th:text="${item.calcularImporte()}"></td>
+						</tr>
+					</tbody>
+				</table>
+				<p class="text-end">
+					<strong>Total general:</strong> <span
+						class="badge bg-secondary text-white"
+						th:text="${factura.getTotal()}"></span>
+				</p>
+				<div class="card mb-5" style="max-width: 20rem;">
+				<div class="card-header">Observaciones</div>
+				<div class="card-body">
+					<p class="card-text"  th:text="${factura.observacion}"></p>	
+					<h5 th:if="${#strings.isEmpty(factura.observacion)}" class="card-title">No tiene observaciones</h4>
+				</div>
+			</div>
+			</div>
+
+	
+		</div>
+
+
+	</div>
+	<footer th:replace="~{/layout/layout :: footer}"></footer>
+	<script
+		th:replace="~{/factura/js/autocomplete-productos :: javascript}"></script>
+</body>
+</html>

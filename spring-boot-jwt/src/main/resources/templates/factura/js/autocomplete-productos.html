@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<script type="text/javascript" th:fragment="javascript">
+	$(document).ready(function(){
+		$("#buscar_producto").autocomplete({
+			source: function(request, response){
+				$.ajax({
+					url: "/factura/cargar-productos/" + request.term,
+					dataType: "json",
+					data: {
+						term: request.term
+					},
+					success: function(data){
+						response($.map(data, function(item){
+							return{
+								value: item.id,
+								label: item.nombre,
+								precio: item.precio,
+							};
+						}));
+					},
+				});	
+				
+			},
+			select: function(event, ui){
+
+				if(itemsHelper.hasProducto(ui.item.value)){
+					itemsHelper.aumentaCantidad(ui.item.value, ui.item.precio);
+					return false;
+				}
+				var linea = $("#plantillaItemsFactura").html();
+				linea = linea.replace(/{ID}/g, ui.item.value);
+				linea = linea.replace(/{NOMBRE}/g, ui.item.label);
+				linea = linea.replace(/{PRECIO}/g, ui.item.precio);
+				$("#cargar_item_productos tbody").append(linea);
+				
+				itemsHelper.calcularImporte(ui.item.value, ui.item.precio, 1);
+				
+				return false;
+			}
+		});
+		
+		
+		$("form").submit(function(){
+			$("#plantillaItemsFactura").remove();	
+			return;
+		});
+	});
+	
+	var itemsHelper = {
+		calcularImporte: function(id, precio, cantidad){
+			$("#total_item_"+id).html(parseInt(precio) * parseInt(cantidad));
+			this.calcularTotalGeneral();
+		},
+		hasProducto: function (id){
+			var resultado = false;
+			$("#item_"+id).each(function(){
+				if(parseInt($(this).val()) == parseInt(id)){
+					resultado = true;
+				}
+			});
+			return resultado;
+		},
+		aumentaCantidad: function(id, precio){
+			cantidad = parseInt($("#cantidad_"+id).val() ? $("#cantidad_"+id).val() : 0);
+			$("#cantidad_"+id).val(++cantidad);
+			this.calcularImporte(id, precio, cantidad);
+			
+		},
+		eliminarItem: function(id){
+			$("#row_"+id).remove();
+			this.calcularTotalGeneral();
+		},
+		calcularTotalGeneral: function(){
+			var total = 0;
+			$('span[id^="total_item_"]').each(function(){
+				total += parseInt($(this).html());
+
+			});
+
+			$("#total_general").html(total);
+		}
+	};
+</script>
+</body>
+</html>

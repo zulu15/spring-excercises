@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{/layout/layout :: head}">
+</head>
+<body>
+	<header th:replace="~{/layout/layout :: header}"></header>
+
+	<div class="container">
+		<div class="">
+			<div class="" style="width: 18rem;">
+				<img th:if="${#strings.length(cliente.foto) > 0}"
+					th:src="@{'/uploads/' + ${cliente.foto}}" class="card-img-top"
+					alt="...">
+				<div class="card-body">
+					<p class="card-text">
+					<ul>
+					<strong>Detalles del Cliente:</strong>
+						<li th:text="${cliente.nombre}"></li>
+						<li th:text="${cliente.apellido}"></li>
+						<li th:text="${cliente.email}"></li>
+						<li th:text="${cliente.createdAt}"></li>
+					</ul>
+
+					</p>
+					
+					
+					<div th:if="${#lists.isEmpty(cliente.facturas)}" class="alert alert-info" th:text="'No hay facturas asignadas para el cliente: ' + ${cliente.nombre} + ' '+ ${cliente.apellido}"></div>	
+					<table class="table table-bordered" th:if="${not #lists.isEmpty(cliente.facturas)}">
+						<thead>
+							<tr>
+
+								<th>Folio</th>
+								<th>Descripción</th>
+								<th>Fecha</th>
+								<th>Total</th>
+								<th sec:authorize="hasRole('ROLE_ADMIN')">Detalle</th>
+								<th sec:authorize="hasRole('ROLE_ADMIN')">Eliminar</th>
+
+
+							</tr>
+
+						</thead>
+						<tbody>
+							<tr th:each="factura: ${cliente.facturas}">
+								<td th:text="${factura.id}"></td>
+								<td th:text="${factura.descripcion}"></td>
+								<td th:text="${factura.fecha}"></td>
+								<td th:text="${factura.getTotal()}"></td>
+								<td sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{'/factura/ver/' + ${factura.id} }" class="btn btn-primary">Ver</a></td>
+								<td sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{'/factura/eliminar/' + ${factura.id}}" class="btn btn-danger" onclick="return confirm('Esta seguro que desea eliminar la factura');">Eliminar</a></td>
+							</tr>
+
+						</tbody>
+					</table>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+	<footer th:replace="~{/layout/layout :: footer}"></footer>
+
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/layout/layout :: head}">
+</head>
+<body>
+<header th:replace="~{/layout/layout :: header}"></header>
+
+<div th:object="${cliente}" th:remove="tag">
+	<ul>
+		<li th:each="err: ${#fields.errors('*')}" th:text="${err}"></li>
+	</ul>
+</div>
+<form th:action="@{/form}" th:object="${cliente}" method="post" enctype="multipart/form-data">
+	<input type="hidden" th:field="*{id}"></input>
+	<div>
+		<label for="nombre">Nombre</label>
+		<input id="nombre" type="text" th:field="*{nombre}"></input>
+		<label th:errors="*{nombre}" class="error"></label>
+		
+	</div>
+	<div>
+		<label for="apellido">Apellido</label>
+		<input type="text" th:field="*{apellido}" id="apellido"></input>
+		<label th:errors="*{apellido}" class="error"></label>
+	</div>
+	<div>
+		<label for="email">Email</label>
+		<input id="email" type="text" th:field="*{email}"></input>
+		<label th:errors="*{email}" class="error"></label>
+		
+	</div>
+	<div>
+		<label for="createdDate">Fecha de creacion</label>
+		<input type="text" th:field="*{createdAt}" id="createdAt"></input>
+		<label th:errors="*{createdAt}" class="error"></label>
+		
+	</div>
+	<div>
+		<label for="foto">Foto</label>
+		<input type="file" name="file" id="foto"></input>
+	
+	</div>
+	
+	
+	<input type="submit" value="Enviar" class="btn btn-primary"></input>
+	
+</form>
+<footer th:replace="~{/layout/layout :: footer}" ></footer>
+
+</body>
+</html>

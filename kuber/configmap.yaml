@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: msvc-usuarios
+data:
+  port: "8001"
+  db_host: "mysql8:3306"
+  database: usuarios
+  lb_auth_issuer_uri: http://ad16c3ee44d9440b892603b89eaaa4ce-868800456.us-east-1.elb.amazonaws.com:9000
+  lb_usuarios_uri: http://a1b3cc1a815594ca0974863af5d29fc3-1800833207.us-east-1.elb.amazonaws.com:8001/api/usuarios
+#  username: root
+#  password: sasa
+  curso_url: "http://a827c8a51eb1847178f52187640e5bf8-969644498.us-east-1.elb.amazonaws.com:8002/api/cursos"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: msvc-cursos
+data:
+  port: "8002"
+  db_host: "postgres14:5432"
+  database: cursos
+#  username: postgres
+#  password: sasa
+  usuario_url: "http://a1b3cc1a815594ca0974863af5d29fc3-1800833207.us-east-1.elb.amazonaws.com:8001/api/usuarios"
+  application.yaml: |-
+      config:
+        texto: Configurando ambiente por defecto
+      ---
+      spring:
+        profiles:
+          active: dev
+      config:
+        texto: Configurando ambiente de desarrollo
+      ---
+      spring:
+        profiles:
+          active: prod
+      config:
+        texto: Configurando ambiente de produccion
